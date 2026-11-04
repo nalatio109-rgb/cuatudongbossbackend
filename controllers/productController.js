@@ -25,10 +25,24 @@ export const getProducts = async (req, res) => {
   }
 };
 
-// GET /api/products/:id (Lấy chi tiết sản phẩm theo ID)
+// GET /api/products/:id (Lấy chi tiết sản phẩm theo ID hoặc Code)
 export const getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const { id } = req.params;
+    let product = null;
+    
+    // Check if it's a valid Mongo ObjectId
+    if (id.match(/^[0-9a-fA-F]{24}$/)) {
+      product = await Product.findById(id);
+    }
+    
+    // If not found by ObjectId, find by product code (case-insensitive)
+    if (!product) {
+      product = await Product.findOne({ 
+        code: { $regex: new RegExp(`^${id}$`, "i") } 
+      });
+    }
+
     if (!product) {
       return res.status(404).json({ success: false, message: "Không tìm thấy sản phẩm" });
     }

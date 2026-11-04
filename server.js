@@ -8,6 +8,8 @@ import projectRoutes from "./routes/projectRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import newsRoutes from "./routes/newsRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import categorySeoRoutes from "./routes/categorySeoRoutes.js";
+import priceQuoteRoutes from "./routes/priceQuoteRoutes.js";
 import { initAdminAccount } from "./controllers/authController.js";
 
 dotenv.config();
@@ -45,6 +47,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/news", newsRoutes);
+app.use("/api/category-seo", categorySeoRoutes);
+app.use("/api/price-quotes", priceQuoteRoutes);
 
 // Root route & Health check
 app.get("/", (req, res) => {

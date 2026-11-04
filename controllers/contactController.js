@@ -3,7 +3,17 @@ import Contact from "../models/Contact.js";
 // POST /api/contacts (Gửi yêu cầu tư vấn / báo giá)
 export const submitContact = async (req, res) => {
   try {
-    const { fullName, phone, productCategory, message } = req.body;
+    const { 
+      fullName, 
+      phone, 
+      productCategory, 
+      productName, 
+      productCode, 
+      dimensions, 
+      quantity, 
+      address, 
+      message 
+    } = req.body;
 
     if (!fullName || !phone) {
       return res.status(400).json({
@@ -16,12 +26,17 @@ export const submitContact = async (req, res) => {
       fullName,
       phone,
       productCategory: productCategory || "Chưa chọn",
+      productName: productName || "",
+      productCode: productCode || "",
+      dimensions: dimensions || "",
+      quantity: quantity || "1",
+      address: address || "",
       message: message || ""
     });
 
     res.status(201).json({
       success: true,
-      message: "Gửi thông tin tư vấn thành công! BOSS sẽ liên hệ lại sớm nhất.",
+      message: "Gửi yêu cầu báo giá thành công! Kỹ sư BOSS sẽ liên hệ tư vấn và gửi bảng giá chi tiết cho bạn sớm nhất.",
       data: newContact
     });
   } catch (error) {
