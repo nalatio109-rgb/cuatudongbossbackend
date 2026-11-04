@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 import connectDB from "./config/db.js";
 
 import productRoutes from "./routes/productRoutes.js";
@@ -10,9 +12,14 @@ import newsRoutes from "./routes/newsRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import categorySeoRoutes from "./routes/categorySeoRoutes.js";
 import priceQuoteRoutes from "./routes/priceQuoteRoutes.js";
+import productArticleRoutes from "./routes/productArticleRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 import { initAdminAccount } from "./controllers/authController.js";
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -39,7 +46,12 @@ app.use(cors({
   },
   credentials: true
 }));
-app.use(express.json());
+
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+
+// Serve static uploaded files
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // API Routes
 app.use("/api/auth", authRoutes);
@@ -49,6 +61,8 @@ app.use("/api/contacts", contactRoutes);
 app.use("/api/news", newsRoutes);
 app.use("/api/category-seo", categorySeoRoutes);
 app.use("/api/price-quotes", priceQuoteRoutes);
+app.use("/api/product-articles", productArticleRoutes);
+app.use("/api/upload", uploadRoutes);
 
 // Root route & Health check
 app.get("/", (req, res) => {
@@ -59,8 +73,29 @@ app.get("/", (req, res) => {
       products: "/api/products",
       projects: "/api/projects",
       contacts: "/api/contacts",
-      news: "/api/news"
+      news: "/api/news",
+      categorySeo: "/api/category-seo",
+      priceQuotes: "/api/price-quotes",
+      productArticles: "/api/product-articles",
+      upload: "/api/upload"
     }
+  });
+});
+
+// 404 Handler for API routes
+app.all("/api/*", (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Không tìm thấy endpoint API: ${req.method} ${req.originalUrl}`
+  });
+});
+
+// Global Error Handler (Always return JSON, never HTML)
+app.use((err, req, res, next) => {
+  console.error("Express Error:", err);
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || "Lỗi máy chủ nội bộ."
   });
 });
 

@@ -36,10 +36,25 @@ export const getProductById = async (req, res) => {
       product = await Product.findById(id);
     }
     
-    // If not found by ObjectId, find by product code (case-insensitive)
+    // If not found by ObjectId, find by product code or slug (case-insensitive)
     if (!product) {
       product = await Product.findOne({ 
-        code: { $regex: new RegExp(`^${id}$`, "i") } 
+        $or: [
+          { code: { $regex: new RegExp(`^${id}$`, "i") } },
+          { slug: { $regex: new RegExp(`^${id}$`, "i") } }
+        ]
+      });
+    }
+
+    // Fallback: search by code keyword if slug has code in it
+    if (!product && id.includes("-")) {
+      const parts = id.split("-");
+      const lastPart = parts[parts.length - 1];
+      product = await Product.findOne({
+        $or: [
+          { code: { $regex: new RegExp(`^${lastPart}$`, "i") } },
+          { code: { $regex: new RegExp(parts.slice(-2).join("-"), "i") } }
+        ]
       });
     }
 

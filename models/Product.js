@@ -4,6 +4,7 @@ const productSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     code: { type: String, required: true },
+    slug: { type: String, default: "" },
     category: { type: String, required: true }, // cuacuon, phukien, cuakeo, cuatudong, nhomkinh
     description: { type: String, default: "" },
     details: { type: String, default: "" },
