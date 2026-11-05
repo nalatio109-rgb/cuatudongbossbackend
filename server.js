@@ -64,6 +64,19 @@ app.use("/api/price-quotes", priceQuoteRoutes);
 app.use("/api/product-articles", productArticleRoutes);
 app.use("/api/upload", uploadRoutes);
 
+// Sitemap & Robots for SEO
+app.get("/sitemap.xml", (req, res) => {
+  const sitemapPath = path.join(__dirname, "../frontend/public/sitemap.xml");
+  res.header("Content-Type", "application/xml");
+  res.sendFile(sitemapPath);
+});
+
+app.get("/robots.txt", (req, res) => {
+  const robotsPath = path.join(__dirname, "../frontend/public/robots.txt");
+  res.header("Content-Type", "text/plain");
+  res.sendFile(robotsPath);
+});
+
 // Root route & Health check
 app.get("/", (req, res) => {
   res.json({
