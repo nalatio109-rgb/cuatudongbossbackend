@@ -14,6 +14,7 @@ import categorySeoRoutes from "./routes/categorySeoRoutes.js";
 import priceQuoteRoutes from "./routes/priceQuoteRoutes.js";
 import productArticleRoutes from "./routes/productArticleRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
+import serviceRoutes from "./routes/serviceRoutes.js";
 import { initAdminAccount } from "./controllers/authController.js";
 
 dotenv.config();
@@ -63,6 +64,7 @@ app.use("/api/category-seo", categorySeoRoutes);
 app.use("/api/price-quotes", priceQuoteRoutes);
 app.use("/api/product-articles", productArticleRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/services", serviceRoutes);
 
 // Sitemap & Robots for SEO
 app.get("/sitemap.xml", (req, res) => {
@@ -90,6 +92,7 @@ app.get("/", (req, res) => {
       categorySeo: "/api/category-seo",
       priceQuotes: "/api/price-quotes",
       productArticles: "/api/product-articles",
+      services: "/api/services",
       upload: "/api/upload"
     }
   });
