@@ -10,12 +10,29 @@ export const getProducts = async (req, res) => {
       filter.category = category;
     }
 
-    if (search) {
-      filter.$or = [
-        { title: { $regex: search, $options: "i" } },
-        { code: { $regex: search, $options: "i" } },
-        { description: { $regex: search, $options: "i" } }
-      ];
+    if (search && search.trim()) {
+      const sanitized = search.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const tokens = sanitized.split(/\s+/).filter(Boolean);
+      
+      if (tokens.length > 1) {
+        filter.$and = tokens.map((token) => ({
+          $or: [
+            { title: { $regex: token, $options: "i" } },
+            { code: { $regex: token, $options: "i" } },
+            { description: { $regex: token, $options: "i" } },
+            { category: { $regex: token, $options: "i" } },
+            { specs: { $regex: token, $options: "i" } }
+          ]
+        }));
+      } else {
+        filter.$or = [
+          { title: { $regex: sanitized, $options: "i" } },
+          { code: { $regex: sanitized, $options: "i" } },
+          { description: { $regex: sanitized, $options: "i" } },
+          { category: { $regex: sanitized, $options: "i" } },
+          { specs: { $regex: sanitized, $options: "i" } }
+        ];
+      }
     }
 
     const products = await Product.find(filter).sort({ createdAt: -1 });

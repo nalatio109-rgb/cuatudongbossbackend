@@ -47,7 +47,10 @@ export const submitContact = async (req, res) => {
 // GET /api/contacts (Lấy danh sách các yêu cầu tư vấn - cho admin)
 export const getContacts = async (req, res) => {
   try {
-    const contacts = await Contact.find().sort({ createdAt: -1 });
+    // Tách bạch hoàn toàn: yêu cầu báo giá chỉ chứa liên hệ tư vấn sản phẩm/dịch vụ, loại bỏ các bản ghi đánh giá
+    const contacts = await Contact.find({
+      productCategory: { $not: /đánh giá/i }
+    }).sort({ createdAt: -1 });
     res.status(200).json({ success: true, count: contacts.length, data: contacts });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
