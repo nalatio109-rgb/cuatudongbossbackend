@@ -4,7 +4,7 @@ const DEFAULT_REVIEWS = [
   {
     name: "Anh Nguyễn Văn Hùng",
     email: "hung.nv@gmail.com",
-    role: "Chủ căn hộ, Quận Hải Châu",
+    role: "",
     avatar: "H",
     rating: 5,
     text: "Lắp cửa cuốn cho garage nhà mình, nhân viên tư vấn rất nhiệt tình và chuyên nghiệp. Thi công nhanh gọn chỉ trong 1 buổi sáng. Cửa vận hành êm, đẹp hơn mình tưởng. Rất hài lòng!",
@@ -16,7 +16,7 @@ const DEFAULT_REVIEWS = [
   {
     name: "Chị Trần Thị Lan",
     email: "lan.tran@gmail.com",
-    role: "Chủ tiệm, Quận Thanh Khê",
+    role: "",
     avatar: "L",
     rating: 5,
     text: "Mình đã lắp cửa kéo inox cho shop thời trang. Chất lượng vượt kỳ vọng, inox sáng bóng, kéo rất nhẹ. Khách vào hay khen cửa đẹp. Boss Đà Nẵng làm việc uy tín, bảo hành chu đáo.",
@@ -26,7 +26,7 @@ const DEFAULT_REVIEWS = [
   {
     name: "Anh Lê Minh Tú",
     email: "tu.le.kts@gmail.com",
-    role: "Kiến trúc sư, Quận Sơn Trà",
+    role: "",
     avatar: "T",
     rating: 5,
     text: "Tôi giới thiệu Boss Đà Nẵng cho nhiều dự án rồi. Họ có đủ loại cửa từ phổ thông đến cao cấp, báo giá minh bạch, không phát sinh. Đặc biệt đội thi công làm đúng bản vẽ kỹ thuật.",
@@ -38,7 +38,7 @@ const DEFAULT_REVIEWS = [
   {
     name: "Chị Phạm Thu Hà",
     email: "thuha.pham@gmail.com",
-    role: "Chủ văn phòng, Quận Ngũ Hành Sơn",
+    role: "",
     avatar: "H",
     rating: 5,
     text: "Lắp cửa trượt tự động cho công ty, cảm biến rất nhạy và êm ái. Nhân viên kỹ thuật hướng dẫn sử dụng tận tình. Sau 6 tháng dùng vẫn hoạt động tốt. Sẽ tiếp tục ủng hộ Boss!",
@@ -48,7 +48,7 @@ const DEFAULT_REVIEWS = [
   {
     name: "Anh Đặng Quốc Bảo",
     email: "baodang.res@gmail.com",
-    role: "Chủ nhà hàng, Quận Cẩm Lệ",
+    role: "",
     avatar: "B",
     rating: 5,
     text: "Boss tư vấn lắp barrier tự động cho bãi xe nhà hàng. Hệ thống chạy ổn định, dùng thẻ từ rất tiện. Giá cả cạnh tranh so với thị trường. Nhân viên phản hồi nhanh khi cần hỗ trợ.",
@@ -89,7 +89,7 @@ export const createReview = async (req, res) => {
     const newReview = await Review.create({
       name,
       email: email || "",
-      role: role || "Khách hàng đã trải nghiệm",
+      role: role || "",
       avatar: avatar || (name ? name[0].toUpperCase() : "K"),
       rating: Number(rating) || 5,
       text: text.trim(),
