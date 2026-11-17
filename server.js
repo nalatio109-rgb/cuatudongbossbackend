@@ -2,8 +2,10 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
 import connectDB from "./config/db.js";
+import UploadedImage from "./models/UploadedImage.js";
 
 import productRoutes from "./routes/productRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
@@ -52,8 +54,30 @@ app.use(cors({
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
-// Serve static uploaded files
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// Serve static uploaded files with persistent MongoDB Atlas fallback
+app.use("/uploads", async (req, res, next) => {
+  const localFilePath = path.join(__dirname, "uploads", req.path);
+  if (fs.existsSync(localFilePath)) {
+    return express.static(path.join(__dirname, "uploads"))(req, res, next);
+  }
+
+  // Fallback: Nếu ổ đĩa bị reset/mất file (như trên Railway), lấy trực tiếp từ MongoDB Atlas!
+  try {
+    const filename = req.path.replace(/^\//, "");
+    if (filename) {
+      const imageDoc = await UploadedImage.findOne({ filename });
+      if (imageDoc && imageDoc.data) {
+        res.set("Content-Type", imageDoc.contentType || "image/jpeg");
+        res.set("Cache-Control", "public, max-age=31536000, immutable");
+        return res.send(imageDoc.data);
+      }
+    }
+  } catch (err) {
+    console.warn("MongoDB image fallback check error:", err.message);
+  }
+
+  next();
+});
 
 // API Routes
 app.use("/api/auth", authRoutes);

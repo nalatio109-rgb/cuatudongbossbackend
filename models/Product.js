@@ -10,6 +10,8 @@ const productSchema = new mongoose.Schema(
     details: { type: String, default: "" },
     specs: [{ type: String }],
     image: { type: String, required: true },
+    images: [{ type: String }],
+    gallery: [{ type: String }],
     badge: { type: String, default: "" },
     price: { type: String, default: "Liên hệ" },
     isFeatured: { type: Boolean, default: false }
