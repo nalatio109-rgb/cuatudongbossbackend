@@ -11,7 +11,7 @@ const sampleProducts = [
   // 1. CỬA CUỐN
   {
     category: "cuacuon",
-    image: "https://images.unsplash.com/photo-1558008258-3256797b43f3?auto=format&fit=crop&w=800&q=80",
+    image: "/about_door_1.png",
     title: "CỬA CUỐN KHE THOÁNG ĐỨC BOSSDOOR",
     code: "BD-900",
     description: "Thân cửa hợp kim nhôm 6063-T5 cao cấp, sơn tĩnh điện CHLB Đức bảo hành 10 năm.",

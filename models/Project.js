@@ -6,7 +6,10 @@ const projectSchema = new mongoose.Schema(
     category: { type: String, required: true },
     location: { type: String, default: "Đà Nẵng" },
     image: { type: String, required: true },
+    images: [{ type: String }],
+    gallery: [{ type: String }],
     description: { type: String, default: "" },
+    content: { type: String, default: "" },
     completedDate: { type: String, default: "" }
   },
   { timestamps: true }
