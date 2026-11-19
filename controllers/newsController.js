@@ -18,7 +18,7 @@ function slugify(text) {
 // GET /api/news
 export const getNews = async (req, res) => {
   try {
-    const newsList = await News.find().sort({ createdAt: -1 });
+    const newsList = await News.find().sort({ updatedAt: -1, createdAt: -1 });
     // Ensure every news item has a slug
     const normalized = newsList.map((item) => {
       const obj = item.toObject ? item.toObject() : item;
