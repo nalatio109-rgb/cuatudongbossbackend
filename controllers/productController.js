@@ -87,7 +87,11 @@ export const getProductById = async (req, res) => {
 // POST /api/products (Tạo sản phẩm mới)
 export const createProduct = async (req, res) => {
   try {
-    const newProduct = await Product.create(req.body);
+    const productData = { ...req.body };
+    if (!productData._id) {
+      delete productData._id;
+    }
+    const newProduct = await Product.create(productData);
     res.status(201).json({ success: true, data: newProduct });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
@@ -97,7 +101,9 @@ export const createProduct = async (req, res) => {
 // PUT /api/products/:id (Cập nhật sản phẩm)
 export const updateProduct = async (req, res) => {
   try {
-    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, {
+    const productData = { ...req.body };
+    delete productData._id;
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, productData, {
       new: true,
       runValidators: true
     });
