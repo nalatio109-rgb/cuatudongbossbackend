@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const priceQuoteItemSchema = new mongoose.Schema(
   {
     stt: { type: Number, default: 1 },
-    code: { type: String, required: true }, // e.g. "SR3", "SR2", "SR1", "VIP"
+    code: { type: String, default: "" }, // e.g. "SR3", "SR2", "SR1", "VIP", "BD-01"
     name: { type: String, default: "" }, // e.g. "Thân cửa kéo SR3"
     description: { type: String, default: "" }, // Multiline specs, thickness, material
     unit: { type: String, default: "m2" }, // "m2", "Bộ", "md"
@@ -11,9 +11,12 @@ const priceQuoteItemSchema = new mongoose.Schema(
     priceOver8: { type: String, default: "" }, // "980,000"
     price6to8: { type: String, default: "" }, // "1,010,000"
     price4to6: { type: String, default: "" }, // "1,030,000"
-    note: { type: String, default: "" }
+    note: { type: String, default: "" },
+    image: { type: String, default: "" },
+    imageUrl: { type: String, default: "" },
+    rawGridCells: { type: mongoose.Schema.Types.Mixed, default: {} }
   },
-  { _id: false }
+  { _id: false, strict: false }
 );
 
 const priceQuoteAddonSchema = new mongoose.Schema(
@@ -54,7 +57,7 @@ const priceQuotePoliciesSchema = new mongoose.Schema(
 
 const priceQuoteSchema = new mongoose.Schema(
   {
-    productCode: { type: String, required: true, unique: true }, // e.g. "CK-DE", "SR3", "BEC.5810", "DL-75"
+    productCode: { type: String, required: true, unique: true }, // e.g. "CK-DE", "SR3", "BEC.5810", "DL-75", "BD-2026"
     productTitle: { type: String, default: "" },
     category: { type: String, default: "cuakeo" }, // cuakeo, cuacuon, phukien, cuatudong
     title: { 
@@ -65,6 +68,10 @@ const priceQuoteSchema = new mongoose.Schema(
       type: String, 
       default: "Áp dụng từ năm 2026 cho đến khi có thông báo mới" 
     },
+    image: { type: String, default: "" },
+    articleAbove: { type: String, default: "" },
+    articleBelow: { type: String, default: "" },
+    customColumns: { type: mongoose.Schema.Types.Mixed, default: [] },
     items: [priceQuoteItemSchema],
     addons: [priceQuoteAddonSchema],
     policies: {
@@ -72,7 +79,7 @@ const priceQuoteSchema = new mongoose.Schema(
       default: () => ({})
     }
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 export default mongoose.model("PriceQuote", priceQuoteSchema);

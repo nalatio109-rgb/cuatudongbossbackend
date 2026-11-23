@@ -68,20 +68,46 @@ export const getPriceQuoteByCode = async (req, res) => {
 // POST /api/price-quotes (Create or Upsert)
 export const savePriceQuote = async (req, res) => {
   try {
-    const { productCode, productTitle, category, title, effectiveDate, items, addons, policies } = req.body;
+    const {
+      _id,
+      id,
+      productCode,
+      productTitle,
+      category,
+      title,
+      effectiveDate,
+      image,
+      articleAbove,
+      articleBelow,
+      customColumns,
+      items,
+      addons,
+      policies
+    } = req.body;
 
-    if (!productCode) {
+    if (!productCode && !id && !_id) {
       return res.status(400).json({ success: false, message: "Mã sản phẩm (productCode) là bắt buộc!" });
     }
 
+    let filter = {};
+    if (_id) {
+      filter = { _id };
+    } else if (productCode) {
+      filter = { productCode: new RegExp(`^${productCode.trim()}$`, "i") };
+    }
+
     const updated = await PriceQuote.findOneAndUpdate(
-      { productCode: new RegExp(`^${productCode.trim()}$`, "i") },
+      filter,
       {
-        productCode: productCode.trim().toUpperCase(),
+        productCode: (productCode || `BD-${Date.now().toString().slice(-4)}`).trim().toUpperCase(),
         productTitle: productTitle || "",
-        category: category || "cuakeo",
+        category: category || "cuacuon",
         title: title || "Bảng giá cập nhật sản phẩm",
         effectiveDate: effectiveDate || "Áp dụng từ năm 2026",
+        image: image || "",
+        articleAbove: articleAbove || "",
+        articleBelow: articleBelow || "",
+        customColumns: customColumns || [],
         items: items || [],
         addons: addons || [],
         policies: policies || {}
