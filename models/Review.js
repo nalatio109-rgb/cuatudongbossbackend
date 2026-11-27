@@ -39,12 +39,20 @@ const reviewSchema = new mongoose.Schema(
     },
     mediaType: {
       type: String,
-      enum: ["image", "video", null],
+      enum: ["image", "video", "mixed", null],
       default: null
     },
     mediaUrl: {
       type: String,
       default: ""
+    },
+    videoUrl: {
+      type: String,
+      default: ""
+    },
+    images: {
+      type: [String],
+      default: []
     },
     verified: {
       type: Boolean,

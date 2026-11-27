@@ -77,7 +77,7 @@ export const getReviews = async (req, res) => {
 // POST /api/reviews - Khách hàng gửi đánh giá mới
 export const createReview = async (req, res) => {
   try {
-    const { name, email, role, avatar, rating, text, color, mediaType, mediaUrl, verified } = req.body;
+    const { name, email, role, avatar, rating, text, color, mediaType, mediaUrl, videoUrl, images, verified } = req.body;
     
     if (!name || !text) {
       return res.status(400).json({
@@ -96,6 +96,8 @@ export const createReview = async (req, res) => {
       color: color || "#07522f",
       mediaType: mediaType || null,
       mediaUrl: mediaUrl || "",
+      videoUrl: videoUrl || "",
+      images: Array.isArray(images) ? images : [],
       verified: verified !== undefined ? verified : true
     });
 
